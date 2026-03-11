@@ -11,7 +11,7 @@ interface Props {
   loading?: boolean;
 }
 
-export default function CaseValeSection({ data, loading }: Props) {
+export default function CaseValeSection({ data }: Props) {
   const sectionRef = useRef<HTMLElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLDivElement>(null);

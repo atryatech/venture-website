@@ -11,7 +11,7 @@ const SKELETON_COUNT = 6;
 export default function InsightsSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const headingRef = useRef<HTMLDivElement>(null);
-  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
+  const cardsRef = useRef<(HTMLAnchorElement | null)[]>([]);
 
   const { insights, loading } = useInsights(SKELETON_COUNT);
 
