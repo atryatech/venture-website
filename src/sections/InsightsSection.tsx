@@ -98,10 +98,13 @@ export default function InsightsSection() {
       {/* Grid */}
       <div className="px-[6vw] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
         {items.map((item, index) => (
-          <div
+          <a
             key={item.id}
             ref={(el) => { cardsRef.current[index] = el; }}
-            className="group cursor-pointer"
+            href={item.skeleton ? undefined : item.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group cursor-pointer block"
           >
             {item.skeleton ? (
               <>
@@ -149,7 +152,7 @@ export default function InsightsSection() {
                 </div>
               </>
             )}
-          </div>
+          </a>
         ))}
       </div>
     </section>

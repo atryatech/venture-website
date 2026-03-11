@@ -41,6 +41,15 @@ function App() {
     return () => ctx.revert();
   }, []);
 
+  // Recalculate ScrollTrigger positions after WP data loads
+  useEffect(() => {
+    if (!casesLoading) {
+      requestAnimationFrame(() => {
+        ScrollTrigger.refresh();
+      });
+    }
+  }, [casesLoading]);
+
   return (
     <div className="relative bg-venture-black min-h-screen">
       {/* Noise Overlay */}

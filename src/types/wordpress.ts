@@ -74,6 +74,7 @@ export interface Partner {
   name: string;
   description: string;
   tags: string[];
+  image?: string;
 }
 
 export interface CF7Response {

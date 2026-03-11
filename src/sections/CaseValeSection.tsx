@@ -101,7 +101,7 @@ export default function CaseValeSection({ data, loading }: Props) {
     }, section);
 
     return () => ctx.revert();
-  }, [data]);
+  }, []);
 
   return (
     <section
@@ -114,16 +114,12 @@ export default function CaseValeSection({ data, loading }: Props) {
         className="absolute overflow-hidden"
         style={{ left: '6vw', top: '12vh', width: '52vw', height: '76vh', maxWidth: '700px' }}
       >
-        {loading ? (
-          <div className="w-full h-full bg-venture-charcoal/30 animate-pulse" />
-        ) : (
-          <img
-            src={image}
-            alt={`${client} Case Study`}
-            className="w-full h-full object-cover"
-            style={{ filter: 'grayscale(40%) contrast(1.1)' }}
-          />
-        )}
+        <img
+          src={image}
+          alt={`${client} Case Study`}
+          className="w-full h-full object-cover"
+          style={{ filter: 'grayscale(40%) contrast(1.1)' }}
+        />
       </div>
 
       {/* Vertical Hairline */}

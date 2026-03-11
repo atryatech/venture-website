@@ -14,12 +14,16 @@ const PARTNER_TAGS: Record<string, string[]> = {
 };
 
 function normalizePartner(post: WPPost): Partner {
+  const media = post._embedded?.['wp:featuredmedia']?.[0];
+  const image = media?.source_url ?? undefined;
+
   return {
     id: post.id,
     slug: post.slug,
     name: stripHtml(post.title.rendered),
     description: stripHtml(post.excerpt.rendered),
     tags: PARTNER_TAGS[post.slug] ?? [],
+    image,
   };
 }
 
