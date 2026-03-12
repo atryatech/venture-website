@@ -10,7 +10,11 @@ interface ContactFormData {
   mensagem: string;
 }
 
-const CF7_FORM_ID = import.meta.env.VITE_CF7_FORM_ID;
+const DEFAULT_CF7_FORM_ID = '529';
+const envFormId = import.meta.env.VITE_CF7_FORM_ID?.trim();
+const CF7_FORM_ID = /^\d+$/.test(envFormId ?? '')
+  ? envFormId
+  : DEFAULT_CF7_FORM_ID;
 
 export function useContactForm() {
   const [submitting, setSubmitting] = useState(false);
