@@ -8,6 +8,11 @@ const navLinks = [
   { label: 'Contato', href: '#contact' },
 ];
 
+const pinnedSectionOffsets: Record<string, number> = {
+  capabilities: 0.22,
+  cases: 0.22,
+};
+
 export default function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -20,6 +25,26 @@ export default function Navigation() {
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const handleNavClick = (href: string) => (event: React.MouseEvent<HTMLAnchorElement>) => {
+    const targetId = href.replace('#', '');
+    const target = document.getElementById(targetId);
+
+    if (!target) {
+      setIsMenuOpen(false);
+      return;
+    }
+
+    event.preventDefault();
+
+    const targetTop = target.getBoundingClientRect().top + window.scrollY;
+    const offsetProgress = pinnedSectionOffsets[targetId] ?? 0;
+    const scrollTarget = Math.max(0, targetTop + window.innerHeight * offsetProgress);
+
+    window.history.replaceState(null, '', href);
+    window.scrollTo({ top: scrollTarget, behavior: 'smooth' });
+    setIsMenuOpen(false);
+  };
 
   return (
     <>
@@ -46,6 +71,7 @@ export default function Navigation() {
               <a
                 key={link.label}
                 href={link.href}
+                onClick={handleNavClick(link.href)}
                 className="text-venture-gray hover:text-venture-white transition-colors text-sm font-medium"
               >
                 {link.label}
@@ -83,7 +109,7 @@ export default function Navigation() {
             <a
               key={link.label}
               href={link.href}
-              onClick={() => setIsMenuOpen(false)}
+              onClick={handleNavClick(link.href)}
               className={`headline-lg text-venture-white hover:text-accent transition-all duration-300 py-4 ${isMenuOpen
                   ? 'opacity-100 translate-y-0'
                   : 'opacity-0 translate-y-8'
