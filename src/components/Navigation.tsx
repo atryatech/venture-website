@@ -1,21 +1,15 @@
 import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom';
 
-const navLinks = [
-  { label: 'Serviços', href: '#capabilities' },
-  { label: 'Cases', href: '#cases' },
-  { label: 'Insights', href: '#insights' },
-  { label: 'Contato', href: '#contact' },
-];
-
-const pinnedSectionOffsets: Record<string, number> = {
-  capabilities: 0.22,
-  cases: 0.22,
-};
+import { getHomeSectionHref, homeSectionLinks, scrollToHomeSection } from '@/lib/site-navigation';
 
 export default function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const location = useLocation();
+
+  const isHome = location.pathname === '/';
 
   useEffect(() => {
     const handleScroll = () => {
@@ -26,23 +20,26 @@ export default function Navigation() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleNavClick = (href: string) => (event: React.MouseEvent<HTMLAnchorElement>) => {
-    const targetId = href.replace('#', '');
-    const target = document.getElementById(targetId);
-
-    if (!target) {
+  const handleNavClick = (sectionId: string) => (event: React.MouseEvent<HTMLAnchorElement>) => {
+    if (!isHome) {
       setIsMenuOpen(false);
       return;
     }
 
     event.preventDefault();
+    scrollToHomeSection(sectionId);
+    setIsMenuOpen(false);
+  };
 
-    const targetTop = target.getBoundingClientRect().top + window.scrollY;
-    const offsetProgress = pinnedSectionOffsets[targetId] ?? 0;
-    const scrollTarget = Math.max(0, targetTop + window.innerHeight * offsetProgress);
+  const handleLogoClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    if (!isHome) {
+      setIsMenuOpen(false);
+      return;
+    }
 
-    window.history.replaceState(null, '', href);
-    window.scrollTo({ top: scrollTarget, behavior: 'smooth' });
+    event.preventDefault();
+    window.history.replaceState(null, '', '/');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
     setIsMenuOpen(false);
   };
 
@@ -57,25 +54,25 @@ export default function Navigation() {
       >
         <div className="px-[6vw] flex items-center justify-between">
           {/* Logo */}
-          <a href="#" className="flex items-center gap-2">
+          <Link to="/" onClick={handleLogoClick} className="flex items-center gap-2">
             <img
               src="/logo-250x60.png"
               alt="Venture"
               className="h-10 md:h-12 object-contain"
             />
-          </a>
+          </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
-            {navLinks.map((link) => (
-              <a
+            {homeSectionLinks.map((link) => (
+              <Link
                 key={link.label}
-                href={link.href}
-                onClick={handleNavClick(link.href)}
+                to={getHomeSectionHref(link.sectionId)}
+                onClick={handleNavClick(link.sectionId)}
                 className="text-venture-gray hover:text-venture-white transition-colors text-sm font-medium"
               >
                 {link.label}
-              </a>
+              </Link>
             ))}
           </div>
 
@@ -105,11 +102,11 @@ export default function Navigation() {
           }`}
       >
         <div className="h-full flex flex-col justify-center items-center">
-          {navLinks.map((link, index) => (
-            <a
+          {homeSectionLinks.map((link, index) => (
+            <Link
               key={link.label}
-              href={link.href}
-              onClick={handleNavClick(link.href)}
+              to={getHomeSectionHref(link.sectionId)}
+              onClick={handleNavClick(link.sectionId)}
               className={`headline-lg text-venture-white hover:text-accent transition-all duration-300 py-4 ${isMenuOpen
                   ? 'opacity-100 translate-y-0'
                   : 'opacity-0 translate-y-8'
@@ -120,7 +117,7 @@ export default function Navigation() {
               }}
             >
               {link.label}
-            </a>
+            </Link>
           ))}
         </div>
       </div>

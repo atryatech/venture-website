@@ -17,57 +17,49 @@ If you are developing a production application, we recommend updating the config
 
 ```js
 export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+  # Venture Website
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+  Frontend institucional da Venture em React, TypeScript e Vite, com WordPress atuando como CMS headless.
 
-      // Other configs...
-    ],
-    languageOptions: {
+  ## Scripts
+
+  ```bash
+  npm install
+  npm run dev
+  npm run build
+  npm run lint
+  npm run preview
+  ```
+
+  ## WordPress
+
+  O projeto consome a API REST do WordPress em `/wp-json`.
+
+  - Em desenvolvimento local, o Vite usa proxy para `https://venture.com.br`.
+  - Para isso, `VITE_WP_BASE_URL` deve ficar vazio em `.env`.
+  - Em produção no mesmo domínio do WordPress, a mesma configuração continua válida.
+  - Se o frontend for publicado em outro domínio, defina `VITE_WP_BASE_URL` explicitamente e ajuste CORS no servidor WordPress.
+
+  ## Rotas
+
+  - `/` home com âncoras e animações GSAP
+  - `/insights` listagem de publicações
+  - `/insights/:slug` detalhe de publicação
+  - `/cases` listagem de cases
+  - `/cases/:slug` detalhe de case
+  - `/servicos` listagem de serviços
+  - `/servicos/:slug` detalhe de serviço
+  - `/parceiros` listagem de parceiros
+  - `/parceiros/:slug` detalhe de parceiro
+
+  ## Deploy Estático
+
+  O projeto usa `BrowserRouter`, então o host precisa responder `index.html` para rotas internas.
+
+  Arquivos incluídos no repositório:
+
+  - `public/_redirects` para hosts compatíveis com a sintaxe do Netlify
+  - `vercel.json` para rewrite em deploys Vercel
+
+  Se o deploy for em outro provedor, configure um rewrite equivalente para todas as rotas não-arquivo apontarem para `/index.html`.
       parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```

@@ -2,6 +2,8 @@ import { useRef, useLayoutEffect, useEffect } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Layers, Bot, Building2, type LucideIcon } from 'lucide-react';
+import { Link } from 'react-router-dom';
+
 import { usePartners } from '@/hooks/usePartners';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -15,7 +17,7 @@ const ICON_MAP: Record<string, LucideIcon> = {
 export default function PartnersSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const headlineRef = useRef<HTMLDivElement>(null);
-  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
+  const cardsRef = useRef<(HTMLAnchorElement | null)[]>([]);
 
   const { partners, loading } = usePartners();
 
@@ -108,6 +110,13 @@ export default function PartnersSection() {
             Parcer<span className="text-accent">ias</span>
           </span>
         </h2>
+
+        <Link
+          to="/parceiros"
+          className="inline-flex items-center gap-2 mt-6 text-sm font-medium text-accent transition-colors hover:text-venture-white"
+        >
+          <span>Explorar parceiros</span>
+        </Link>
       </div>
 
       {/* Partner Cards */}
@@ -116,9 +125,10 @@ export default function PartnersSection() {
         const leftPos = 6 + index * 30;
 
         return (
-          <div
+          <Link
             key={partner.id}
             ref={(el) => { cardsRef.current[index] = el; }}
+            to={partner.skeleton ? '#' : partner.link}
             className="absolute card-border bg-venture-charcoal/30 backdrop-blur-sm flex flex-col justify-between p-6 md:p-8"
             style={{
               left: `${leftPos}vw`,
@@ -127,6 +137,11 @@ export default function PartnersSection() {
               height: '44vh',
               maxWidth: '420px',
               perspective: '1000px',
+            }}
+            onClick={(event) => {
+              if (partner.skeleton) {
+                event.preventDefault();
+              }
             }}
           >
             {/* Icon */}
@@ -162,7 +177,7 @@ export default function PartnersSection() {
                 ))}
               </div>
             </div>
-          </div>
+          </Link>
         );
       })}
     </section>

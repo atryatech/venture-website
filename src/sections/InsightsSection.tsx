@@ -2,6 +2,8 @@ import { useRef, useLayoutEffect, useEffect } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Clock, ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
+
 import { useInsights } from '@/hooks/useInsights';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -93,18 +95,29 @@ export default function InsightsSection() {
         <p className="text-venture-gray text-lg max-w-xl">
           Relatórios, análises e tendências para decisões melhores.
         </p>
+
+        <Link
+          to="/insights"
+          className="inline-flex items-center gap-2 mt-6 text-sm font-medium text-accent transition-colors hover:text-venture-white"
+        >
+          <span>Ver todos os insights</span>
+          <ArrowRight className="w-4 h-4" />
+        </Link>
       </div>
 
       {/* Grid */}
       <div className="px-[6vw] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
         {items.map((item, index) => (
-          <a
+          <Link
             key={item.id}
             ref={(el) => { cardsRef.current[index] = el; }}
-            href={item.skeleton ? undefined : item.link}
-            target="_blank"
-            rel="noopener noreferrer"
+            to={item.skeleton ? '#' : item.link}
             className="group cursor-pointer block"
+            onClick={(event) => {
+              if (item.skeleton) {
+                event.preventDefault();
+              }
+            }}
           >
             {item.skeleton ? (
               <>
@@ -152,7 +165,7 @@ export default function InsightsSection() {
                 </div>
               </>
             )}
-          </a>
+          </Link>
         ))}
       </div>
     </section>

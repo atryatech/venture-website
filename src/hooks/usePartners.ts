@@ -1,31 +1,7 @@
 import { useState, useEffect } from 'react';
 import { wpFetch } from '@/lib/wordpress';
+import { normalizePartner } from '@/lib/wordpress-content';
 import type { WPPost, Partner } from '@/types/wordpress';
-
-function stripHtml(html: string): string {
-  const doc = new DOMParser().parseFromString(html, 'text/html');
-  return doc.body.textContent || '';
-}
-
-// Tags mapped statically per partner (WP posts don't have structured tags for these)
-const PARTNER_TAGS: Record<string, string[]> = {
-  'softexpert-2': ['GESTÃO', 'CONFORMIDADE', 'EXCELÊNCIA'],
-  'biti9-rpa': ['RPA', 'AUTOMAÇÃO', 'IA'],
-};
-
-function normalizePartner(post: WPPost): Partner {
-  const media = post._embedded?.['wp:featuredmedia']?.[0];
-  const image = media?.source_url ?? undefined;
-
-  return {
-    id: post.id,
-    slug: post.slug,
-    name: stripHtml(post.title.rendered),
-    description: stripHtml(post.excerpt.rendered),
-    tags: PARTNER_TAGS[post.slug] ?? [],
-    image,
-  };
-}
 
 export function usePartners() {
   const [partners, setPartners] = useState<Partner[]>([]);

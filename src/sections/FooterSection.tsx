@@ -2,21 +2,20 @@ import { useRef, useLayoutEffect } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Linkedin, Instagram } from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom';
+
+import { getHomeSectionHref, homeSectionLinks, scrollToHomeSection } from '@/lib/site-navigation';
 
 gsap.registerPlugin(ScrollTrigger);
-
-const navLinks = [
-  { label: 'Serviços', href: '#' },
-  { label: 'Cases', href: '#' },
-  { label: 'Insights', href: '#' },
-  { label: 'Contato', href: '#' },
-];
 
 export default function FooterSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const wordmarkRef = useRef<HTMLDivElement>(null);
   const linksRef = useRef<HTMLDivElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
+  const location = useLocation();
+
+  const isHome = location.pathname === '/';
 
   useLayoutEffect(() => {
     const section = sectionRef.current;
@@ -80,6 +79,15 @@ export default function FooterSection() {
     return () => ctx.revert();
   }, []);
 
+  const handleSectionClick = (sectionId: string) => (event: React.MouseEvent<HTMLAnchorElement>) => {
+    if (!isHome) {
+      return;
+    }
+
+    event.preventDefault();
+    scrollToHomeSection(sectionId);
+  };
+
   return (
     <footer
       ref={sectionRef}
@@ -100,14 +108,15 @@ export default function FooterSection() {
 
           {/* Navigation Links */}
           <div ref={linksRef} className="flex flex-wrap gap-6 md:gap-8">
-            {navLinks.map((link) => (
-              <a
+            {homeSectionLinks.map((link) => (
+              <Link
                 key={link.label}
-                href={link.href}
+                to={getHomeSectionHref(link.sectionId)}
+                onClick={handleSectionClick(link.sectionId)}
                 className="text-venture-gray hover:text-venture-white transition-colors text-sm font-medium"
               >
                 {link.label}
-              </a>
+              </Link>
             ))}
           </div>
         </div>

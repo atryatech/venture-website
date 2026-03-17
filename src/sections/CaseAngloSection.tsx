@@ -2,6 +2,8 @@ import { useRef, useLayoutEffect } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
+
 import type { CaseStudy } from '@/types/wordpress';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -128,16 +130,14 @@ export default function CaseAngloSection({ data }: Props) {
           {body}
         </p>
 
-        <a
+        <Link
           ref={ctaRef}
-          href={link}
-          target={link.startsWith('http') ? '_blank' : undefined}
-          rel={link.startsWith('http') ? 'noopener noreferrer' : undefined}
+          to={link}
           className="inline-flex items-center gap-2 text-accent hover:text-white transition-colors group"
         >
           <span className="text-sm font-medium">Ler o case completo</span>
           <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-        </a>
+        </Link>
       </div>
 
       {/* Vertical Hairline */}

@@ -4,6 +4,14 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Mail, Phone, MapPin, Send, CheckCircle } from 'lucide-react';
 import { useContactForm } from '@/hooks/useContactForm';
 
+const fieldIds = {
+  nome: 'contact-nome',
+  email: 'contact-email',
+  empresa: 'contact-empresa',
+  telefone: 'contact-telefone',
+  mensagem: 'contact-mensagem',
+} as const;
+
 gsap.registerPlugin(ScrollTrigger);
 
 export default function ContactSection() {
@@ -157,57 +165,71 @@ export default function ContactSection() {
               </button>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="space-y-5">
+            <form onSubmit={handleSubmit} className="space-y-5" noValidate>
               <div>
-                <label className="micro-label text-[#6A6A6A] block mb-2">Nome</label>
+                <label htmlFor={fieldIds.nome} className="micro-label text-[#6A6A6A] block mb-2">Nome</label>
                 <input
+                  id={fieldIds.nome}
+                  name="nome"
                   type="text"
                   value={formData.nome}
                   onChange={(e) => setFormData({ ...formData, nome: e.target.value })}
                   className="w-full px-4 py-3 border border-[#E5E5E5] rounded-md text-venture-black focus:outline-none focus:border-accent transition-colors"
                   placeholder="Seu nome"
+                  autoComplete="name"
                   required
                 />
               </div>
 
               <div>
-                <label className="micro-label text-[#6A6A6A] block mb-2">Email</label>
+                <label htmlFor={fieldIds.email} className="micro-label text-[#6A6A6A] block mb-2">Email</label>
                 <input
+                  id={fieldIds.email}
+                  name="email"
                   type="email"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   className="w-full px-4 py-3 border border-[#E5E5E5] rounded-md text-venture-black focus:outline-none focus:border-accent transition-colors"
                   placeholder="seu@email.com"
+                  autoComplete="email"
                   required
                 />
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div>
-                  <label className="micro-label text-[#6A6A6A] block mb-2">Empresa</label>
+                  <label htmlFor={fieldIds.empresa} className="micro-label text-[#6A6A6A] block mb-2">Empresa</label>
                   <input
+                    id={fieldIds.empresa}
+                    name="empresa"
                     type="text"
                     value={formData.empresa}
                     onChange={(e) => setFormData({ ...formData, empresa: e.target.value })}
                     className="w-full px-4 py-3 border border-[#E5E5E5] rounded-md text-venture-black focus:outline-none focus:border-accent transition-colors"
                     placeholder="Nome da empresa"
+                    autoComplete="organization"
                   />
                 </div>
                 <div>
-                  <label className="micro-label text-[#6A6A6A] block mb-2">Telefone</label>
+                  <label htmlFor={fieldIds.telefone} className="micro-label text-[#6A6A6A] block mb-2">Telefone</label>
                   <input
+                    id={fieldIds.telefone}
+                    name="telefone"
                     type="tel"
                     value={formData.telefone}
                     onChange={(e) => setFormData({ ...formData, telefone: e.target.value })}
                     className="w-full px-4 py-3 border border-[#E5E5E5] rounded-md text-venture-black focus:outline-none focus:border-accent transition-colors"
                     placeholder="(00) 00000-0000"
+                    autoComplete="tel"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="micro-label text-[#6A6A6A] block mb-2">Mensagem</label>
+                <label htmlFor={fieldIds.mensagem} className="micro-label text-[#6A6A6A] block mb-2">Mensagem</label>
                 <textarea
+                  id={fieldIds.mensagem}
+                  name="mensagem"
                   value={formData.mensagem}
                   onChange={(e) => setFormData({ ...formData, mensagem: e.target.value })}
                   className="w-full px-4 py-3 border border-[#E5E5E5] rounded-md text-venture-black focus:outline-none focus:border-accent transition-colors resize-none"
@@ -218,7 +240,7 @@ export default function ContactSection() {
               </div>
 
               {error && (
-                <p className="text-red-500 text-sm">{error}</p>
+                <p className="text-red-500 text-sm" role="alert" aria-live="polite">{error}</p>
               )}
 
               <button

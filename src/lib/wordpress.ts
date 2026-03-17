@@ -1,4 +1,4 @@
-const BASE = import.meta.env.VITE_WP_BASE_URL || 'https://venture.com.br';
+const BASE = import.meta.env.VITE_WP_BASE_URL || '';
 const API = `${BASE}/wp-json/wp/v2`;
 
 export async function wpFetch<T>(

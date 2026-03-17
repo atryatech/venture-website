@@ -2,6 +2,9 @@ import { useRef, useLayoutEffect } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Workflow, Shield, Cpu, Building2 } from 'lucide-react';
+import { Link } from 'react-router-dom';
+
+import { getContentPath, serviceHighlights } from '@/lib/wordpress-content';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -11,24 +14,28 @@ const capabilities = [
     label: 'ESTRATÉGIA',
     title: 'Estratégia e Sustentabilidade, com visão de longo prazo.',
     icon: Shield,
+    slug: serviceHighlights[0].slug,
   },
   {
     id: 'digital',
     label: 'TRANSFORMAÇÃO',
     title: 'Transformação Digital com uso de tecnologias inovadoras.',
     icon: Cpu,
+    slug: serviceHighlights[1].slug,
   },
   {
     id: 'perf',
     label: 'PERFORMANCE',
     title: 'Performance e Tecnologia em automação e TI.',
     icon: Workflow,
+    slug: serviceHighlights[2].slug,
   },
   {
     id: 'projetos',
     label: 'PROJETOS',
     title: 'Gestão em Projetos de Capital, controlando riscos e prazos.',
     icon: Building2,
+    slug: serviceHighlights[3].slug,
   },
 ];
 
@@ -36,7 +43,7 @@ export default function CapabilitiesSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const headlineRef = useRef<HTMLDivElement>(null);
   const paragraphRef = useRef<HTMLParagraphElement>(null);
-  const tilesRef = useRef<(HTMLDivElement | null)[]>([]);
+  const tilesRef = useRef<(HTMLAnchorElement | null)[]>([]);
   const barsRef = useRef<(HTMLDivElement | null)[]>([]);
 
   useLayoutEffect(() => {
@@ -162,9 +169,10 @@ export default function CapabilitiesSection() {
         const leftPos = 6 + index * 22;
 
         return (
-          <div
+          <Link
             key={cap.id}
             ref={(el) => { tilesRef.current[index] = el; }}
+            to={getContentPath('service', cap.slug)}
             className="absolute card-border bg-venture-charcoal/50 backdrop-blur-sm flex flex-col justify-between p-6 md:p-8"
             style={{
               left: `${leftPos}vw`,
@@ -191,7 +199,7 @@ export default function CapabilitiesSection() {
             <p className="text-venture-gray text-sm md:text-base leading-relaxed">
               {cap.title}
             </p>
-          </div>
+          </Link>
         );
       })}
     </section>

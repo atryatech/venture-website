@@ -120,3 +120,8 @@ a.animated-link:hover::after {
     opacity: 0.5;
   }
 }
+
+/* Internal content pages */
+.content-grid > * {
+  min-width: 0;
+}
